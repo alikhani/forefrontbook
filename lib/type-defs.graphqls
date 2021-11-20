@@ -1,7 +1,9 @@
 type Query {
   viewer: User!
+  post: Post
 }
 
 type Mutation {
   updateName(name: String!): User!
+  addPost(content: String): Post
 }

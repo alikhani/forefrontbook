@@ -11,6 +11,9 @@ const Query: Required<QueryResolvers<ResolverContext>> = {
   viewer(_parent, _args, _context, _info) {
     return userProfile
   },
+  post(_parent, _args, _context, _info) {
+    return {id: 1, content: "hej"};
+  }
 }
 
 const Mutation: Required<MutationResolvers<ResolverContext>> = {
@@ -18,6 +21,9 @@ const Mutation: Required<MutationResolvers<ResolverContext>> = {
     userProfile.name = _args.name
     return userProfile
   },
+  addPost(_parent, _args, _context, _info) {
+    return {id: 2, content: _args.content}
+  }
 }
 
 export default { Query, Mutation }
