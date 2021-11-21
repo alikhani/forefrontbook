@@ -1,5 +1,6 @@
 import { QueryResolvers, MutationResolvers } from './type-defs.graphqls'
 import { ResolverContext } from './apollo'
+import { prisma } from './prisma';
 
 const userProfile = {
   id: String(1),
@@ -12,7 +13,11 @@ const Query: Required<QueryResolvers<ResolverContext>> = {
     return userProfile
   },
   post(_parent, _args, _context, _info) {
-    return {id: 1, content: "hej"};
+    return prisma.post.findMany({
+      include: {
+        author: true
+      }
+    })
   }
 }
 
@@ -21,8 +26,8 @@ const Mutation: Required<MutationResolvers<ResolverContext>> = {
     userProfile.name = _args.name
     return userProfile
   },
-  addPost(_parent, _args, _context, _info) {
-    return {id: 2, content: _args.content}
+  addPost(_parent, { content }, _context, _info) {
+    return prisma.post.create({ data: { content } })
   }
 }
 

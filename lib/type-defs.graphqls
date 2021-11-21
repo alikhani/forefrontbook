@@ -1,6 +1,6 @@
 type Query {
   viewer: User!
-  post: Post
+  post: [Post]
 }
 
 type Mutation {
