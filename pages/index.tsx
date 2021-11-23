@@ -8,6 +8,7 @@ import {
   useViewerQuery,
   ViewerDocument,
 } from '../lib/viewer.graphql'
+import Posts from '../components/feed';
 
 const Index = () => {
   const router = useRouter()
@@ -38,6 +39,7 @@ const Index = () => {
         <button onClick={() => signOut()}>
           <a>Log out</a>
         </button>
+        <Posts />
       </div>
     )
   }
