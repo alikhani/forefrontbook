@@ -1,18 +1,28 @@
+import { AuthenticationError, UserInputError } from 'apollo-server-micro'
 import { QueryResolvers, MutationResolvers } from './type-defs.graphqls'
 import { ResolverContext } from './apollo'
-import { prisma } from './prisma';
+import prisma from './prisma';
 
-const userProfile = {
-  id: String(1),
-  name: 'John Smith',
-  status: 'cached',
-}
 
 const Query: Required<QueryResolvers<ResolverContext>> = {
-  viewer(_parent, _args, _context, _info) {
-    return userProfile
+  async viewer(_parent, _args, _context, _info) {
+    try {
+      const email = _context?.session?.user?.email
+
+      if (email) {
+        return prisma.user.findUnique({ 
+          where: {
+            email
+          } 
+        })
+      }
+    } catch (error) {
+      throw new AuthenticationError(
+        'Authentication token is invalid, please log in'
+      )
+    }
   },
-  post(_parent, _args, _context, _info) {
+  async post(_parent, _args, _context, _info) {
     return prisma.post.findMany({
       include: {
         author: true
@@ -22,10 +32,6 @@ const Query: Required<QueryResolvers<ResolverContext>> = {
 }
 
 const Mutation: Required<MutationResolvers<ResolverContext>> = {
-  updateName(_parent, _args, _context, _info) {
-    userProfile.name = _args.name
-    return userProfile
-  },
   addPost(_parent, { content }, _context, _info) {
     return prisma.post.create({ data: { content } })
   }

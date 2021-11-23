@@ -1,9 +1,13 @@
 type Query {
-  viewer: User!
+  user(id: ID!): User!
+  users: [User]!
+  viewer: User
   post: [Post]
 }
 
 type Mutation {
-  updateName(name: String!): User!
+  signUp(input: SignUpInput!): SignUpPayload!
+  signIn(input: SignInInput!): SignInPayload!
+  signOut: Boolean!
   addPost(content: String): Post
 }

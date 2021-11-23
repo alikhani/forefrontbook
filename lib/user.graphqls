@@ -1,3 +1,18 @@
+input SignUpInput {
+  email: String!
+  password: String!
+}
+input SignInInput {
+  email: String!
+  password: String!
+}
+type SignUpPayload {
+  user: User!
+}
+type SignInPayload {
+  user: User!
+}
+
 type User {
   id: ID!
   name: String!
