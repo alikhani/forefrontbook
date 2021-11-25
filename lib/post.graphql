@@ -2,6 +2,11 @@ query Post {
   post {
     id
     content
+    author {
+      id
+      name
+      image
+    }
   }
 }
 

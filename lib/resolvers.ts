@@ -24,6 +24,11 @@ const Query: Required<QueryResolvers<ResolverContext>> = {
   },
   async post(_parent, _args, _context, _info) {
     return prisma.post.findMany({
+      orderBy: [
+        {
+          createdAt: 'desc',
+        }
+      ],
       include: {
         author: true
       }
@@ -32,8 +37,21 @@ const Query: Required<QueryResolvers<ResolverContext>> = {
 }
 
 const Mutation: Required<MutationResolvers<ResolverContext>> = {
-  addPost(_parent, { content }, _context, _info) {
-    return prisma.post.create({ data: { content } })
+  async addPost(_parent, { content }, _context, _info) {
+    const email = _context?.session?.user?.email
+    let user;
+    if (email) {
+      user = await prisma.user.findUnique({ 
+        where: {
+          email
+        } ,
+        select: {
+          id: true
+        }
+      });
+    }
+    console.log({user})
+    return prisma.post.create({ data: { content, authorId: user?.id } })
   }
 }
 

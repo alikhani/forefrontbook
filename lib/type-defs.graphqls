@@ -6,8 +6,5 @@ type Query {
 }
 
 type Mutation {
-  signUp(input: SignUpInput!): SignUpPayload!
-  signIn(input: SignInInput!): SignInPayload!
-  signOut: Boolean!
   addPost(content: String): Post
 }

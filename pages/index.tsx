@@ -8,14 +8,15 @@ import {
   useViewerQuery,
   ViewerDocument,
 } from '../lib/viewer.graphql'
+import CreatePost from '../components/create-post';
 import Posts from '../components/feed';
 
 const Index = () => {
   const router = useRouter()
   const [session, sLoading] = useSession();
-  const { data, loading, error } = useViewerQuery()
-  const viewer = data?.viewer
-  const shouldRedirect = !(loading || error || viewer)
+  // const { data, loading, error } = useViewerQuery()
+  // const viewer = data?.viewer
+  // const shouldRedirect = !(loading || error || viewer)
 
   // useEffect(() => {
   //   if (shouldRedirect) {
@@ -24,14 +25,19 @@ const Index = () => {
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [shouldRedirect])
 
-  if (error) {
-    return <p>{error.message}</p>
+  // if (error) {
+  //   return <p>{error.message}</p>
+  // }
+  console.log({session});
+
+  if (sLoading) {
+    return <p>Loading...</p>
   }
 
-  if (viewer) {
+  if (session) {
     return (
       <div>
-        You're signed in as {viewer.name} goto{' '}
+        You're signed in as {session.name} goto{' '}
         <Link href="/about">
           <a>about</a>
         </Link>{' '}
@@ -39,6 +45,7 @@ const Index = () => {
         <button onClick={() => signOut()}>
           <a>Log out</a>
         </button>
+        <CreatePost />
         <Posts />
       </div>
     )

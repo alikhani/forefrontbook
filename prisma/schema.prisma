@@ -11,10 +11,12 @@ datasource db {
 }
 
 model Post {
-  id        String @id @default(uuid())
-  content   String
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  String?
+  id          String @id @default(uuid())
+  content     String
+  author      User?   @relation(fields: [authorId], references: [id])
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+  authorId    String?
 }
 
 model User {

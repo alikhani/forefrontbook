@@ -1,9 +1,23 @@
 import { usePostQuery } from '../lib/post.graphql'
+import Post from './post'
 
 const Feed = () => {
-	const { data: { post } } = usePostQuery()
+	const { data, loading, error } = usePostQuery()
+    const post = data?.post;
+    if (error) {
+        return <p></p>
+    }
     if (post) {
-        return <div>{post.map(p => <p>{p.content}</p>)}</div>
+        return (
+            <div>
+                {post.map((p) => (
+                    <Post
+                        key={p.id}
+                        post={p}
+                    />
+                ))}
+            </div>
+        )
     }
     return <div>loading</div>
 }
