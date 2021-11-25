@@ -17,10 +17,29 @@ model Post {
   createdAt   DateTime  @default(now()) @map(name: "created_at")
   updatedAt   DateTime  @updatedAt @map(name: "updated_at")
   authorId    String?
+  comments    Comment[]
+  likes       Like[]
+}
+
+model Comment {
+  id          String    @id @default(uuid())
+  content     String
+  author      User?     @relation(fields: [authorId], references: [id])
+  authorId    String?
+  post        Post      @relation(fields: [postId], references: [id])
+  postId      String
+}
+
+model Like {
+  id          String    @id @default(uuid())
+  author      User?     @relation(fields: [authorId], references: [id])
+  authorId    String?
+  post        Post      @relation(fields: [postId], references: [id])
+  postId      String
 }
 
 model User {
-  id            String @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map(name: "email_verified")
@@ -28,6 +47,8 @@ model User {
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
   posts         Post[]
+  comments      Comment[]
+  likes         Like[]
 
   @@map(name: "users")
 }
@@ -54,7 +75,7 @@ model Account {
 
 model Session {
   id           String   @id @default(uuid())
-  userId       String      @map(name: "user_id")
+  userId       String   @map(name: "user_id")
   expires      DateTime
   sessionToken String   @unique @map(name: "session_token")
   accessToken  String   @unique @map(name: "access_token")
